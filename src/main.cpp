@@ -86,11 +86,11 @@ int main()
           		iss >> ro;
           		iss >> theta;
           		iss >> ro_dot;
-          		meas_package.raw_measurements_ << ro,theta, ro_dot;
+          		meas_package.raw_measurements_ << ro, theta, ro_dot;
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
           }
-          float x_gt;
+        float x_gt;
     	  float y_gt;
     	  float vx_gt;
     	  float vy_gt;
@@ -106,7 +106,13 @@ int main()
     	  ground_truth.push_back(gt_values);
           
           //Call ProcessMeasurment(meas_package) for Kalman filter
-    	  ukf.ProcessMeasurement(meas_package);    	  
+    	  ukf.ProcessMeasurement(meas_package);
+
+        if (meas_package.sensor_type_ == MeasurementPackage::LASER) {
+          cout << "NIS_laser: " << ukf.NIS_laser_ << "\n";
+        } else if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
+          cout << "NIS_radar: " << ukf.NIS_radar_ << "\n";
+        }  
 
     	  //Push the current estimated x,y positon from the Kalman filter's state vector
 
